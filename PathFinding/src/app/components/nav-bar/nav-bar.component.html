@@ -1,0 +1,140 @@
+<mat-toolbar color="primary">
+  <button
+    mat-icon-button
+    (click)="drawer.toggle()"
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+    matTooltip="Info about the action"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Pathfinding visualizer</span>
+  <span class="example-spacer"></span>
+  <mat-label>Algorithms</mat-label>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+    matTooltip="Info about the action"
+    (click)="openVisualizeAlgorithms()"
+  >
+    <mat-icon>pageview</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-drawer-container class="example-container" autosize [hasBackdrop]="false">
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <button
+      mat-button
+      color="primary"
+      (click)="drawToggle()"
+      [disabled]="disableButtons"
+    >
+      Add Walls
+    </button>
+    <button
+      mat-button
+      color="primary"
+      (click)="eraseToggle()"
+      [disabled]="disableButtons"
+    >
+      Remove Walls
+    </button>
+    <button
+      mat-button
+      color="primary"
+      (click)="RandomWalls()"
+      [disabled]="disableButtons"
+    >
+      Random Walls
+    </button>
+    <button
+      mat-button
+      color="primary"
+      (click)="changeStartNodeOption()"
+      [disabled]="disableButtons"
+    >
+      Change Start
+    </button>
+    <button
+      mat-button
+      color="primary"
+      (click)="changeEndNodeOption()"
+      [disabled]="disableButtons"
+    >
+      Change End
+    </button>
+    <button
+      mat-button
+      color="accent"
+      (click)="a_star_search()"
+      [disabled]="disableButtons"
+    >
+      A* algorithm
+    </button>
+    <button
+      mat-button
+      color="accent"
+      (click)="bfs_Search()"
+      [disabled]="disableButtons"
+    >
+      BFS algorithm
+    </button>
+    <button
+      mat-button
+      color="accent"
+      (click)="dijkstraSearch_A_star_variation()"
+      [disabled]="disableButtons"
+    >
+      Dijkstra's algorithm
+    </button>
+    <button
+      mat-button
+      color="basic"
+      (click)="sampleMaze('assets/Maze1.txt')"
+      [disabled]="disableButtons"
+    >
+      Sample maze 1
+    </button>
+    <button
+      mat-button
+      color="basic"
+      (click)="sampleMaze('assets/Maze2.txt')"
+      [disabled]="disableButtons"
+    >
+      Sample maze 2
+    </button>
+    <button
+      mat-button
+      color="basic"
+      (click)="sampleMaze('assets/Maze3.txt')"
+      [disabled]="disableButtons"
+    >
+      Sample maze 3
+    </button>
+  </mat-drawer>
+</mat-drawer-container>
+
+<div class="how-to">
+  <button
+    mat-fab
+    (click)="openCreatePostDialog()"
+    color="accent"
+    aria-label="Example icon button with a delete icon"
+  >
+    <mat-icon>question_mark</mat-icon>
+  </button>
+</div>
+<div class="reset-button">
+  <button
+    mat-fab
+    (click)="resetGrid()"
+    color="accent"
+    aria-label="Example icon button with a bookmark icon"
+    [disabled]="disableButtons"
+  >
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+
+<canvas class="canvas" id="myCanvas" width="1235" height="520"> </canvas>
