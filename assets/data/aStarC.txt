@@ -1,0 +1,130 @@
+A Star Algorithm
+The A star (A*) algorithm is an algorithm used to solve the shortest path problem in a graph. 
+This means that given a number of nodes and the edges between them as well as the “length” of 
+the edges (referred to as “weight”) and a heuristic (more on that later), the A* algorithm finds 
+the shortest path from the specified start node to all other nodes. Nodes are sometimes referred 
+to as vertices (plural of vertex) - here, we’ll call them nodes.
+
+Description of the Algorithm
+The basic principle behind the A star (A*) algorithm is to iteratively look at the node with the 
+currently smallest priority (which is the shortest distance from the start plus the heuristic to 
+the goal) and update all not yet visited neighbors if the path to it via the current node is shorter. 
+This is very similar to the Dijkstra algorithm, with the difference being that the lowest priority 
+node is visited next, rather than the shortest distance node. In essence, Dijkstra uses the distance 
+as the priority, whereas A* uses the distance plus the heuristic.
+
+Why does adding the heuristic make sense? Without it, the algorithm has no idea if its going in the 
+right direction. When manually searching for the shortest path in this example, you probably prioritised 
+paths going to the right over paths going up or down. This is because the goal node is to the right of 
+the start node, so going right is at least generally the correct direction. The heuristic gives the 
+algorithm this spatial information.
+
+So if a node has the currently shortest distance but is generally going in the wrong direction, 
+whereas Dijkstra would have visited that node next, A Star will not. For this to work, 
+the heuristic needs to be admissible, meaning it has to never overestimate the actual 
+cost (i.e. distance) - which is the case for straight line distance in street networks, 
+for example. Intuitively, that way the algorithm never overlooks a shorter path because the
+ priority will always be lower than the real distance (if the current shortest path is A, 
+ then if there is any way path B could be shorter it will be explored). 
+ One simple heuristic that fulfils this property is straight line distance (e.g. in a street network)
+
+In more detail, this leads to the following Steps:
+
+    1. Initialize the distance to the starting node as 0 and the distances to all other nodes as infinite
+    2. Initialize the priority to the starting node as the straight-line distance to the goal and the 
+    priorities of all other nodes as infinite
+    3. Set all nodes to “unvisited”
+    4. While we haven’t visited all nodes and haven’t found the goal node:
+
+        1. Find the node with currently lowest priority (for the first pass, this will be the source node itself)
+        2. If it’s the goal node, return its distance
+        3. For all nodes next to it that we haven’t visited yet, check if the currently smallest distance to 
+        that neighbor is bigger than if we were to go via the current node
+        4. If it is, update the smallest distance of that neighbor to be the distance from the source to the 
+        current node plus the distance from the current node to that neighbor, and update its priority to be 
+        the distance plus its straight-line distance to the goal node
+
+IMPLEMENTATION:
+
+package a_star.c.simple;
+
+import java.util.Arrays;
+
+/**
+ * Used to perform the A-Star (A*) Algorithm to find the shortest path from a start to a target node.
+ */
+public class AStar {
+    /**
+     * Finds the shortest distance between two nodes using the A-star algorithm
+     * @param graph an adjacency-matrix-representation of the graph where (x,y) is the weight of the edge or 0 if there is no edge.
+     * @param heuristic an estimation of distance from node x to y that is guaranteed to be lower than the actual distance. E.g. straight-line distance
+     * @param start the node to start from.
+     * @param goal the node we're searching for
+     * @return The shortest distance to the goal node. Can be easily modified to return the path.
+     * */
+    public static double aStar(int[][] graph, double[][] heuristic, int start, int goal) {
+
+        //This contains the distances from the start node to all other nodes
+        int[] distances = new int[graph.length];
+        //Initializing with a distance of "Infinity"
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        //The distance from the start node to itself is of course 0
+        distances[start] = 0;
+
+        //This contains the priorities with which to visit the nodes, calculated using the heuristic.
+        double[] priorities = new double[graph.length];
+        //Initializing with a priority of "Infinity"
+        Arrays.fill(priorities, Integer.MAX_VALUE);
+        //start node has a priority equal to straight line distance to goal. It will be the first to be expanded.
+        priorities[start] = heuristic[start][goal];
+
+        //This contains whether a node was already visited
+        boolean[] visited = new boolean[graph.length];
+
+        //While there are nodes left to visit...
+        while (true) {
+
+            // ... find the node with the currently lowest priority...
+            double lowestPriority = Integer.MAX_VALUE;
+            int lowestPriorityIndex = -1;
+            for (int i = 0; i < priorities.length; i++) {
+                //... by going through all nodes that haven't been visited yet
+                if (priorities[i] < lowestPriority && !visited[i]) {
+                    lowestPriority = priorities[i];
+                    lowestPriorityIndex = i;
+                }
+            }
+
+            if (lowestPriorityIndex == -1) {
+                // There was no node not yet visited --> Node not found
+                return -1;
+            } else if (lowestPriorityIndex == goal) {
+                // Goal node found
+                System.out.println("Goal node found!");
+                return distances[lowestPriorityIndex];
+            }
+
+            System.out.println("Visiting node " + lowestPriorityIndex + " with currently lowest priority of " + lowestPriority);
+
+            //...then, for all neighboring nodes that haven't been visited yet....
+            for (int i = 0; i < graph[lowestPriorityIndex].length; i++) {
+                if (graph[lowestPriorityIndex][i] != 0 && !visited[i]) {
+                    //...if the path over this edge is shorter...
+                    if (distances[lowestPriorityIndex] + graph[lowestPriorityIndex][i] < distances[i]) {
+                        //...save this path as new shortest path
+                        distances[i] = distances[lowestPriorityIndex] + graph[lowestPriorityIndex][i];
+                        //...and set the priority with which we should continue with this node
+                        priorities[i] = distances[i] + heuristic[i][goal];
+                        System.out.println("Updating distance of node " + i + " to " + distances[i] + " and priority to " + priorities[i]);
+                    }
+                }
+            }
+
+            // Lastly, note that we are finished with this node.
+            visited[lowestPriorityIndex] = true;
+            //System.out.println("Visited nodes: " + Arrays.toString(visited));
+            //System.out.println("Currently lowest distances: " + Arrays.toString(distances));
+
+        }
+    }
+}
