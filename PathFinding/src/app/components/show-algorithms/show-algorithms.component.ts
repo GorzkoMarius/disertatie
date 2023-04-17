@@ -18,43 +18,43 @@ export class ShowAlgorithmsComponent implements OnInit {
   dijkstraCPlusPlus: string;
   constructor(httpClient: HttpClient) {
     httpClient
-      .get('/assets/data/aStarJava.txt', { responseType: 'text' })
+      .get('assets/data/aStarJava.txt', { responseType: 'text' })
       .subscribe((data) => (this.aStarJava = data));
     httpClient
-      .get('/assets/data/aStarJavascript.txt', { responseType: 'text' })
+      .get('assets/data/aStarJavascript.txt', { responseType: 'text' })
       .subscribe((data) => (this.aStarJavaScript = data));
     httpClient
-      .get('/assets/data/aStarC.txt', {
+      .get('assets/data/aStarC.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.aStarCPlusPlus = data));
     httpClient
-      .get('/assets/data/BFSJava.txt', {
+      .get('assets/data/BFSJava.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.bfsJava = data));
     httpClient
-      .get('/assets/data/BFSC.txt', {
+      .get('assets/data/BFSC.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.bfsCPlusPlus = data));
     httpClient
-      .get('/assets/data/BFSJavascript.txt', {
+      .get('assets/data/BFSJavascript.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.bfsJavaScript = data));
     httpClient
-      .get('/assets/data/dijJava.txt', {
+      .get('assets/data/dijJava.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.dijkstraJava = data));
     httpClient
-      .get('/assets/data/dijC.txt', {
+      .get('assets/data/dijC.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.dijkstraCPlusPlus = data));
     httpClient
-      .get('/assets/data/dijJavascript.txt', {
+      .get('assets/data/dijJavascript.txt', {
         responseType: 'text',
       })
       .subscribe((data) => (this.dijkstraJavascript = data));
